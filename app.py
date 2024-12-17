@@ -548,12 +548,16 @@ def train_input():
 
 styles = []
 style_list = []
+count = 0
 base_models_reverse = [base_models[1], base_models[0]]
 for base_model in base_models_reverse:
     folder_path = f"{os.path.dirname(os.path.abspath(__file__))}/styles/{base_model['name']}"
     files = os.listdir(folder_path)
     files.sort()
     for file in files:
+        if count > 2:
+            continue # only download 2 styles, don't need them
+        count = count + 1
         file_path = os.path.join(folder_path, file)
         with open(file_path, "r", encoding='utf-8') as f:
             data = json.load(f)
@@ -596,4 +600,4 @@ with gr.Blocks(css=MAIN_CSS_CODE, theme=gr.themes.Soft()) as demo:
             train_input()
 
 if __name__ == "__main__":
-    demo.queue(status_update_rate=1).launch(share=False)
+    demo.queue(status_update_rate=1).launch(share=True)
